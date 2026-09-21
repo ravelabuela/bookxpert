@@ -1,0 +1,6 @@
+faiss-cpu==1.13.2
+numpy==2.4.3
+openai==2.29.0
+pypdf==6.19.0
+python-dotenv==1.2.2
+sentence-transformers==5.3.0
