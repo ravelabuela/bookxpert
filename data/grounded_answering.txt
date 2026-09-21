@@ -1,0 +1,16 @@
+Grounded Answering and Citation Practices
+
+A language model is useful because it can synthesize several passages into a direct, readable answer. It is risky because it can also produce fluent statements that are not supported by the available documents. Grounded answering is the practice of constraining generation to supplied evidence. The prompt should explicitly tell the model that it may not use outside knowledge and that it must state when the evidence is insufficient.
+
+The most important fallback behavior is a consistent abstention. If retrieved context does not answer a question, the assistant should say that it does not know based on the provided documents. It should not guess from general knowledge, even when its guess is likely correct. This policy is especially valuable for private policy documents, compliance material, contracts, and changing operational instructions. In such settings, a plausible but uncited answer can be worse than no answer.
+
+Citations serve two audiences. For the user, a citation offers a path to verify a statement and read surrounding context. For the developer, it makes errors easier to diagnose. A minimal citation includes the source filename and page number. If the source is not paginated, a section heading or chunk identifier is a useful replacement. Citations should appear next to the claims they support rather than as a vague list at the bottom of an answer.
+
+The retrieved chunks themselves should also be visible in the interface. Showing the source excerpts, their filenames, pages, and similarity scores reveals what evidence the system sent to the model. A high similarity score is not a truth score; it only says that the embedding model considered a chunk semantically close to the query. Users should evaluate the actual text, particularly when a question is ambiguous or when documents disagree.
+
+Prompt design can reinforce careful behavior. A well-scoped instruction asks for concise answers, prohibits unsupported assertions, requires inline citations, and gives the exact abstention wording. Temperature should be low for factual document tasks because the desired response is consistent rather than creative. The system prompt establishes the assistant's evidence-bound role, while a user prompt supplies the question and formatted context. Context labels such as "Source 1: handbook.pdf, page 3" make citation generation straightforward.
+
+Grounding has limits. A model can misread a passage, omit a relevant qualification, or attach a citation to an adjacent but insufficient source. Retrieval can also surface material that is relevant in wording but wrong in intent. More advanced systems may add reranking, quote extraction, citation verification, confidence thresholds, or human review. These additions improve reliability but do not remove the need for thoughtful evaluation.
+
+An evaluation set should include answerable questions, multi-hop questions that draw on more than one passage, and unanswerable questions. Review each output for factual support, citation accuracy, readability, and proper uncertainty. When the bot refuses an unsupported request, that behavior should be demonstrated rather than hidden. Trustworthy systems are not those that answer every question; they are systems that distinguish evidence from speculation.
+

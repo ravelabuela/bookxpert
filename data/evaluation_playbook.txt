@@ -1,0 +1,16 @@
+Evaluation Playbook for a Small Document QA Bot
+
+Evaluation turns a promising demo into an engineering artifact. The first step is to define representative questions before changing the system. A small collection can support ten to twenty test prompts, with each prompt linked to the source passage expected to answer it. This practice avoids the common mistake of judging a system only by memorable successes.
+
+Retrieval evaluation asks a narrow question: did the expected evidence appear in the top-k results? Recall at k is an intuitive metric for this stage. If a passage needed to answer a question is among the first four retrieved chunks, that question succeeds for recall at four. Failures may indicate that chunk boundaries are poor, the query uses terminology not represented in the documents, or the embedding model is not suitable for the corpus. Looking at source chunks is more actionable than looking only at a final answer.
+
+Answer evaluation asks whether the response is faithful to retrieved evidence. A reviewer can mark each answer as supported, partially supported, unsupported, or correctly abstained. Citation correctness is a separate check: a citation should point to text that actually substantiates the nearby claim. Answers also need to be useful. A perfectly grounded response that is too vague to answer the question is not a strong user experience.
+
+Queries should cover different forms. Direct fact questions test simple lookup. Why and how questions test explanation. Comparison questions may require two chunks or two files. Constraint questions test whether the bot retains qualifiers such as dates, exceptions, and thresholds. Finally, unsupported questions test the abstention rule. A bot should be asked about information that is clearly outside the collection, such as a current weather forecast when the corpus contains only engineering notes.
+
+When a result is weak, change one variable at a time. First inspect document extraction: garbled text and retained headers can damage retrieval. Next inspect chunks: are they long enough to include an explanation and short enough to be specific? Then compare retrieval using different values of k. Only after these steps should a developer consider switching the embedding model or adding a reranker. Controlled changes make it possible to learn why a modification helped or harmed performance.
+
+Human review remains important for small systems. Ask a colleague to phrase questions in ways the developer did not anticipate. They may use synonyms, incomplete questions, or domain-specific language. Their feedback reveals whether the interface gives sufficient evidence and whether the answer's citations are understandable. Record the question, retrieved passages, answer, and judgement in a lightweight evaluation log.
+
+Production evaluation adds concerns such as latency, cost, access control, privacy, and monitoring. Even a basic project can prepare for those concerns by persisting its index, keeping API keys out of source control, logging no sensitive user questions by default, and making its design choices explicit. The goal is not a perfect score from one model run. The goal is a repeatable method for detecting and improving failures.
+
