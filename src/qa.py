@@ -49,6 +49,9 @@ class DocumentQA:
         return results
 
     def answer(self, question: str, results: list[SearchResult]) -> str:
+                # Refuse before generation when no retrieved passage is relevant enough.
+        if not results or results[0].score < 0.20:
+            return "I don't know based on the provided documents."
         context = "\n\n".join(
             f"[Source {i}: {item.source}, page {item.page}]\n{item.text}"
             for i, item in enumerate(results, start=1)
